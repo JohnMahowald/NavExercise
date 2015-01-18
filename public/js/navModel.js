@@ -15,7 +15,7 @@
   NavModel.prototype.render = function() {
     var li = this._buildTopLevelNav();
     var ul = this._buildSubLevelNav();
-    
+
     if (ul) { li.appendChild(ul) }
 
     this.el.appendChild(li);
@@ -24,10 +24,13 @@
   // Private Methods
 
   NavModel.prototype._buildTopLevelNav = function () {
-     return this.buildLi({
+    var li = this._buildLi({
       label: this.label,
-      url: this.url
+      url: this.url,
     });
+
+    li.className = "top-level-nav";
+    return li;
   }
 
   NavModel.prototype._buildSubLevelNav = function () {
@@ -39,7 +42,8 @@
     }
 
     for (var i = 0; i < this.items.length; i ++) {
-       li = this.buildLi(this.items[i]);
+       li = this._buildLi(this.items[i]);
+       li.className = "secondary-nav";
        ul.appendChild(li);
     }
 
