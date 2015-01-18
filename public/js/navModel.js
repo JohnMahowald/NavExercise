@@ -3,13 +3,11 @@
     window.HugeNav = {};
   }
 
-  HugeNav.HUGENAV = document.getElementById("huge-nav");
-
   var NavModel = HugeNav.NavModel = function (options) {
     this.items = options.items;
     this.label = options.label;
     this.url = options.url;
-    this.el = HugeNav.HUGENAV;
+    this.el = null;
   }
 
   NavModel.prototype.render = function() {
@@ -18,11 +16,17 @@
 
     if (ul) { li.appendChild(ul) }
 
-    this.el.appendChild(li);
+    // Store a reference to the element for event handling
+    this.el = li;
+
+    HugeNav.HUGENAV.appendChild(li);
+  }
+
+  NavModel.prototype.restoreClassName = function () {
+    this.el.className = "top-level-nav";
   }
 
   // Private Methods
-
   NavModel.prototype._buildTopLevelNav = function () {
     var li = this._buildLi({
       label: this.label,
@@ -30,6 +34,12 @@
     });
 
     li.className = "top-level-nav";
+
+    // Only register a toggle event if the item has a sub-menu
+    if (this.items.length > 0) {
+      li.addEventListener("click", HugeNav.Events.toggleNav, true);
+    }
+
     return li;
   }
 
@@ -44,6 +54,7 @@
     for (var i = 0; i < this.items.length; i ++) {
        li = this._buildLi(this.items[i]);
        li.className = "secondary-nav";
+       li.addEventListener("click", HugeNav.Events.navigateAndClearScreen);
        ul.appendChild(li);
     }
 
