@@ -4,8 +4,11 @@
   }
 
   HugeNav.controller = new HugeNav.NavController({
-    route: "/api/nav.json"
+    route: "/api/nav.json",
+    model: HugeNav.NavModel
   });
 
   HugeNav.controller.getNavObjects();
+
 })();
+
