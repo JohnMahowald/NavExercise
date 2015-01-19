@@ -10,35 +10,43 @@
   };
 
   NavController.prototype.getNavObjects = function () {
-    var xmlHttp;
-    var controller = this;
+    var xmlHttp, controller;
+
+    controller = this;
 
     xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", this.route, true);
     xmlHttp.send();
 
-    xmlHttp.onreadystatechange = function () {
-      if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-        controller.parseResponse(xmlHttp.response);
-      }
-    };
+    xmlHttp.onreadystatechange = controller.handleResponse.bind(this);
   };
 
-  NavController.prototype.parseResponse = function (response) {
-    var res = JSON.parse(response);
-    this.buildNavModels(res);
+  NavController.prototype.handleResponse = function (e) {
+    var req;
+
+    req = e.currentTarget
+
+    if (req.readyState === 4 && req.status === 200) {
+      this._buildNav(req.response);
+    }
   }
 
-  NavController.prototype.buildNavModels = function(res) {
+  // Private Methods
+  NavController.prototype._buildNav = function (response) {
+    this._buildNavModels(JSON.parse(response));
+    this._renderNav();
+  }
+
+  NavController.prototype._buildNavModels = function(res) {
+    var model;
+
     for (var i = 0; i < res.items.length; i ++) {
-      var model = new this.model(res.items[i]);
+      model = new this.model(res.items[i]);
       this.navModels.push(model);
     }
-
-    this.renderNav();
   }
 
-  NavController.prototype.renderNav = function () {
+  NavController.prototype._renderNav = function () {
     for (var i = 0; i < this.navModels.length; i ++) {
       this.navModels[i].render();
     }
