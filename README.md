@@ -6,11 +6,11 @@ Thanks for the fun exercise. I have included documentation through my code, but 
 
 I've added six files to /public
 
-## CSS:
+* CSS:
   1. desktop.css
   2. mobile.css
   
-## JS (in load order):
+* JS (in load order):
   1. events.js: An object storing functions for handling events
   2. navModel.js: An object constructor for representing Top-Level-Links.
   3. navController.js: An object constructor for making API calls and storing
