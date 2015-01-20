@@ -6,11 +6,11 @@ Thanks for the fun exercise. I have included documentation through my code, but 
 
 I've added six files to /public
 
-* CSS:
+## CSS:
   1. desktop.css
   2. mobile.css
   
-* JS (in load order):
+## JS (in load order):
   1. events.js: An object storing functions for handling events
   2. navModel.js: An object constructor for representing Top-Level-Links.
   3. navController.js: An object constructor for making API calls and storing
@@ -19,7 +19,7 @@ I've added six files to /public
 
 After the init.js is loaded, it stores a series of globals and initializes an instance of the navController object. The navController has a function for making an API call to request the menu items. This function is called at the end of init.js.
 
-On successful return of the API call, the JSON is parsed and navModel objects are created. These navModel objects each have a render function. This function will create a <li>, <a>, nested <ul> if it exists, register necessary event handlers, and add the newly created HTML to the DOM.
+On successful return of the API call, the JSON is parsed and navModel objects are created. These navModel objects each have a render function. This function will create a '<li>', '<a>', nested '<ul>' if it exists, register necessary event handlers, and add the newly created HTML to the DOM.
 
 One of the unique challenges I ran into with this project was handling the copyright placement in the mobile view. The challenge was having the copyright fixed at the bottom when the nav did span the height of the page, and having the copyright sit below the menu when the nav exceeded the height of the page.
 
