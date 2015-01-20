@@ -16,9 +16,6 @@
     this._buildTopLevelNav();
     this._buildSubLevelNav();
 
-    // Only add submenu if it exists
-    if (this.ul) { this.li.appendChild(this.ul) }
-
     HugeNav.NAV.appendChild(this.li);
   }
 
@@ -28,24 +25,28 @@
 
   // Private Methods
   NavModel.prototype._buildTopLevelNav = function () {
-    this.li = this._buildLi({
+    var li;
+
+    li = this._buildLi({
       label: this.label,
       url: this.url,
     });
 
-    this.li.className = "top-level-nav";
+    li.className = "top-level-nav";
+    li.dataset.subNavCount = this.items.length;
     
-    this._registerEventHandlers();
+    this.li = this._registerEventHandlers(li);
   }
 
   NavModel.prototype._buildSubLevelNav = function () {
-    var li;
+    var li, span;
 
     // Return if there is no sub-level nav
     if (this.items.length <= 0) { return }
 
     this.ul = document.createElement("ul");
 
+    // Build all sublevel navs
     for (var i = 0; i < this.items.length; i ++) {
        li = this._buildLi(this.items[i]);
        li.className = "secondary-nav";
@@ -53,7 +54,15 @@
        this.ul.appendChild(li);
     }
 
-    return this.ul;
+    // Build the chevron for the top-level-nav;
+    span = document.createElement('span');
+    span.className = "chevron";
+
+    // For DOM precedence, first append the chevron, then append the list.  The
+    // chevron is added before the link on the top-level-nav for favorable
+    // hover styling
+    this.li.insertBefore(span, this.li.firstChild);
+    this.li.appendChild(this.ul) 
   }
 
   NavModel.prototype._buildLi = function(options) {
@@ -71,9 +80,11 @@
 
   NavModel.prototype._registerEventHandlers = function(li) {
     if (this.items.length > 0) {
-      this.li.addEventListener("click", HugeNav.Events.activateNav, true);
+      li.addEventListener("click", HugeNav.Events.toggleNav, true);
     } else {
-      this.li.addEventListener("click", HugeNav.Events.navigateAndClearScreen);
+      li.addEventListener("click", HugeNav.Events.navigateAndClearScreen);
     }
+
+    return li;
   }
 })();

@@ -12,13 +12,19 @@
       }
     },
 
-    activateNav: function (e) {
+    toggleNav: function (e) {
       e.preventDefault();
 
-      e.currentTarget.className = "top-level-nav active";
+      if (e.currentTarget.className.indexOf("active") === -1) {
+        Events._clearTopLevelEls();
+        Events._setCopyright(true, e.currentTarget);
+        e.currentTarget.className = "top-level-nav active";
+      } else {
+        e.currentTarget.className = "top-level-nav";
+        Events._setCopyright(false);
+      }
 
-      Events._openSidebar();
-      Events._setCopyright();
+      Events._setMask();
     }, 
 
     navigateAndClearScreen: function (e) {
@@ -34,6 +40,20 @@
     },
 
     // Private Methods
+    _openSidebar: function () {
+      HugeNav.OUTERNAV.className = "open";
+      HugeNav.HEADER.className = "open";
+      Events._setMask();
+      Events._setCopyright(true);
+    },
+
+    _closeSidebar: function () {
+      HugeNav.OUTERNAV.className = "";
+      HugeNav.HEADER.className = "";
+      Events._removeMask();
+      Events._clearTopLevelEls();
+    }, 
+
     _setMask: function () {
       HugeNav.masked = true;
       HugeNav.MAINCONTENT.className = "open";
@@ -50,37 +70,27 @@
       }
     },
 
-    _openSidebar: function () {
-      HugeNav.OUTERNAV.className = "open";
-      Events._setMask();
-      Events._openHeader();
+    _setCopyright: function (opening, el) {
+      var newHeight;
 
-      // Ensure copyright is set based on sidebar height post DOM rendering
-      setTimeout(Events._setCopyright, 0);
+      if (el) { 
+        newHeight = parseInt(el.dataset.subNavCount) * 48 
+      }
+
+      if (opening && newHeight) {
+        Events._adjustCopyright(HugeNav.naturalOffset + newHeight);
+      } else {
+        Events._adjustCopyright(HugeNav.naturalOffset);
+      }
     },
 
-    _closeSidebar: function () {
-      HugeNav.OUTERNAV.className = "";
-      Events._removeMask();
-      Events._closeHeader();
-      Events._clearTopLevelEls();
-    }, 
-
-    _setCopyright: function (e) {
-      // 48px copyright height, 60px header height
-      if ((HugeNav.NAV.offsetHeight + 108) > window.innerHeight) {
+    _adjustCopyright: function (offset) {
+      // 48px for the copyright height, 60px header height = 108px;
+      if ((offset + 108) > window.innerHeight) {
         HugeNav.COPYRIGHT.className = "";
       } else {
         HugeNav.COPYRIGHT.className = "fixed"
       }
-    },
-
-    _closeHeader: function () {
-      HugeNav.HEADER.className = "";
-    },
-
-    _openHeader: function () {
-      HugeNav.HEADER.className = "open";
     }
   }
 })();

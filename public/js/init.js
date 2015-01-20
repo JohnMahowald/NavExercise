@@ -14,6 +14,10 @@
 
   // Remember if the screen is masked
   HugeNav.masked = false;
+  // Remember the menu height for setting the copyright (Events._setCopyright)
+  setTimeout( function () {
+    HugeNav.naturalOffset = HugeNav.NAV.offsetHeight;
+  }, 0);
 
   // Instantiates the controller
   HugeNav.controller = new HugeNav.NavController({
@@ -28,7 +32,7 @@
   // NOTE: Passing true as third argument ensures screen clears first.
   // NOTE: Additional event listers are added in navModels.js
   HugeNav.MAINCONTENT.addEventListener("click", HugeNav.Events.clearScreen);
-  HugeNav.OUTERNAV.addEventListener("click", HugeNav.Events.clearScreen, true);
+  HugeNav.HEADER.addEventListener("click", HugeNav.Events.clearScreen, true);
   HugeNav.BURGER.addEventListener("click", HugeNav.Events.toggleSidebar);
 })();
 
