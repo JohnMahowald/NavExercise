@@ -3,52 +3,51 @@
     window.HugeNav = {};
   }
 
+  // NavController Class //
+  // Namespace: HugeNav.NavController
+  // Load Order: 3 of 4
+
+  // Initialize a NavController object
   var NavController = HugeNav.NavController = function (options) {
     this.route = options.route;
     this.model = options.model;
     this.navModels = [];
   };
 
+  // Builds an API call and requests Nav objects, binds an event listener for
+  // http response
   NavController.prototype.getNavObjects = function () {
-    var xmlHttp, controller;
-
-    controller = this;
+    var xmlHttp 
 
     xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", this.route, true);
-    xmlHttp.send();
+    xmlHttp.onreadystatechange = this._handleResponse.bind(this);
 
-    xmlHttp.onreadystatechange = controller.handleResponse.bind(this);
+    xmlHttp.send();
   };
 
-  NavController.prototype.handleResponse = function (e) {
-    var req;
+  // PRIVATE
+  
+  // Only build the nav if request finished, response is ready, and status is ok
+  NavController.prototype._handleResponse = function (e) {
+    var data = e.currentTarget
 
-    req = e.currentTarget
-
-    if (req.readyState === 4 && req.status === 200) {
-      this._buildNav(req.response);
+    if (data.readyState === 4 && data.status === 200) {
+      this._buildAndRenderNav(data.response);
     }
   }
 
-  // Private Methods
-  NavController.prototype._buildNav = function (response) {
-    this._buildNavModels(JSON.parse(response));
-    this._renderNav();
-  }
+  // Both builds models and calls their render function before adding them to
+  // the controllers navModel array
+  NavController.prototype._buildAndRenderNav = function (response) {
+    var res;
 
-  NavController.prototype._buildNavModels = function(res) {
-    var model;
+    res = JSON.parse(response);
 
     for (var i = 0; i < res.items.length; i ++) {
       model = new this.model(res.items[i]);
+      model.render();
       this.navModels.push(model);
-    }
-  }
-
-  NavController.prototype._renderNav = function () {
-    for (var i = 0; i < this.navModels.length; i ++) {
-      this.navModels[i].render();
     }
   }
 })();

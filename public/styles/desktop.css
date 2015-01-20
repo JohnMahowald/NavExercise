@@ -1,7 +1,7 @@
 @import "fonts.css";
 
 /* simple reset */
-html, body, nav, div, ul, li, h1, p, header, span, a {
+html, body, nav, header, section, div, ul, li, h1, p, span, a {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -13,7 +13,10 @@ body {
   min-width: 1000px;
 }
 
-/* Header Styles */
+/* 
+ **  HEADER STYLES **
+ */
+
 .brand {
   display: block;
   background-image: url('../images/HUGE-white.png');
@@ -26,7 +29,9 @@ body {
   float: left;
 }
 
-/* Nav Styles */
+/* 
+ ** NAV STYLES **
+ */
 
 nav {
   height: 72px;
@@ -61,6 +66,7 @@ a {
 
 .top-level-nav>ul {
   position: absolute;
+  padding: 12px 0;
   top: 72px;
   display: none;
   z-index: 10;
@@ -87,7 +93,9 @@ a {
   display: none;
 }
 
-/* Hero Styles */
+/* 
+ ** MAIN CONTENT STYLES **
+ */
 #mask {
   background: #000;
   position: absolute;
@@ -95,9 +103,10 @@ a {
   top: 72px;
   bottom: 0;
   width: 100%;
-  transition: opacity .3s ease;
   opacity: 0;
   z-index: -5;
+  -webkit-transition: opacity .3s ease;
+  transition: opacity .3s ease;
 }
 
 .open>#mask {
@@ -127,8 +136,6 @@ a {
   text-align: center;
   color: #fff;
 }
-
-/* Content Styles */
 
 .content {
   padding: 60px;
